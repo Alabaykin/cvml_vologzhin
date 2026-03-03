@@ -125,4 +125,4 @@ for i in range(7):
         text_with_spaces += char
         x2_p = x2
 
-    print(text_with_spaces)
+    print(i, text_with_spaces)
