@@ -5,7 +5,7 @@ from pathlib import Path
 from skimage.measure import regionprops, label
 from skimage.io import imread
 from collections import Counter
-n_feature =8
+n_feature = 8
 def extractor(image):
     if image.ndim == 2:
         binary = image
@@ -17,7 +17,10 @@ def extractor(image):
     props = regionprops(lb)
     props = sorted(props, key=lambda x: x.bbox[1])
     p=props[0]
-    return np.array([p.eccentricity,4 * p.euler_number,p.extent, p.solidity,(p.axis_major_length / p.axis_minor_length), p.extent, p.centroid_local[0]/p.image.shape[0], p.centroid_local[1]/p.image.shape[1]], dtype='f4')
+    return np.array([p.perimeter/p.area,p.eccentricity, p.euler_number,
+                    p.solidity,(p.axis_major_length / p.axis_minor_length),
+                    p.extent, p.centroid_local[0]/p.image.shape[0], p.centroid_local[1]/p.image.shape[1]], dtype='f4'
+                    )
 #/p.image.shape[0]
 def make_train(path):
     train = []
