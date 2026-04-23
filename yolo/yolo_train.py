@@ -51,7 +51,7 @@ if __name__ == '__main__':
         conf = 0.01,
         iou = 0.7,
 
-        project = "figures",
+        project = str(Path(__file__).parent / "runs" / "detect" / "figures"),
         name = "yolo",
         save = True,
         save_period = 5,

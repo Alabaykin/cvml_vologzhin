@@ -4,7 +4,7 @@ import cv2
 from ultralytics import YOLO
 
 def main():
-    weights_path = Path(__file__).resolve().parent / "runs" / "detect" / "figures" / "yolo" / "weights" / "best.pt"
+    weights_path = Path(__file__).resolve().parent / "runs" / "detect" / "figures" / "yolo3" / "weights" / "best.pt"
     object_detector = YOLO(str(weights_path))
     
     camera = cv2.VideoCapture(0)
