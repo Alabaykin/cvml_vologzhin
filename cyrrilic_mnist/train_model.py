@@ -11,6 +11,12 @@ from PIL import Image
 import io
 import numpy as np
 
+def fix_text(text):
+    try:
+        return text.encode('cp437').decode('cp866')
+    except Exception:
+        return text
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"{device=}")
 
@@ -28,7 +34,7 @@ LR = 0.001
 def extract_classes(zip_file):
     with zipfile.ZipFile(zip_file, 'r') as z:
         all_imgs = [f for f in z.namelist() if f.endswith('.png') and '/' in f]
-        classes = sorted(set(f.split('/')[1] for f in all_imgs))
+        classes = sorted(set(fix_text(f.split('/')[1]) for f in all_imgs))
         class_to_idx = {c: i for i, c in enumerate(classes)}
         return all_imgs, class_to_idx
 
@@ -42,7 +48,7 @@ class FastDataset(Dataset):
                 img_pil = Image.open(io.BytesIO(img_bytes)).convert('RGBA')
                 img = np.array(img_pil)[:, :, 3]
                 img = np.expand_dims(img, axis=-1) 
-                label = class_dict[path.split('/')[1]]
+                label = class_dict[fix_text(path.split('/')[1])]
                 self.data.append((img, label))
 
     def __len__(self):
@@ -106,7 +112,7 @@ if __name__ == "__main__":
     print("Найдены классы:", list(class2idx.keys()))
     print(f"Всего изображений: {len(all_paths)}")
 
-    labels = [class2idx[p.split('/')[1]] for p in all_paths]
+    labels = [class2idx[fix_text(p.split('/')[1])] for p in all_paths]
     train_paths, test_paths = train_test_split(
         all_paths, test_size=0.2, random_state=42, stratify=labels
     )

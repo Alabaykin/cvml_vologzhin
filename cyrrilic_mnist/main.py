@@ -4,7 +4,7 @@ from pathlib import Path
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from sklearn.model_selection import train_test_split
-from train_model import DeepCyrillicNet, FastDataset, extract_classes
+from train_model import DeepCyrillicNet, FastDataset, extract_classes, fix_text
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"{device=}")
@@ -16,7 +16,7 @@ all_paths, class2idx = extract_classes(zip_path)
 idx2class = {v: k for k, v in class2idx.items()}
 num_cls = len(class2idx)
 
-labels = [class2idx[p.split('/')[1]] for p in all_paths]
+labels = [class2idx[fix_text(p.split('/')[1])] for p in all_paths]
 _, test_paths = train_test_split(
     all_paths, test_size=0.2, random_state=42, stratify=labels
 )
