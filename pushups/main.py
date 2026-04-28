@@ -14,7 +14,7 @@ def get_angle(a, b, c):
 def main():
     base_dir = Path(__file__).parent
     print("Loading model...")
-    model = YOLO("yolov8n-pose.pt")
+    model = YOLO("yolo26n-pose.pt")
     
     video_path = str(base_dir / "test.mp4")
     print(f"Opening video: {video_path}")
